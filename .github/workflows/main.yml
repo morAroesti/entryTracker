@@ -1,0 +1,48 @@
+name: entryTracker
+
+on:
+  push:
+    branches: [ "main" ]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+    - name: Checkout App
+      uses: actions/checkout@v2
+      
+    - name: Build the App
+      run: docker build -t entryTracker:1 .
+      
+    - name: Run Docker container
+      run: docker run --name=entry_trackerb -p "5000:5000" -d entry_tracker:1
+      
+    - name: Wait 
+      run: sleep 5
+      
+    - name: CURL application
+      run: curl http://localhost:5000 
+  
+    - name: test status code curl
+      run: |
+          response_code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5)
+          if [ $response_code -eq 200 ]; then
+          echo "Service is up and running (Status code: $response_code)"
+          exit 0
+          else
+          echo "Service check failed (Status code: $response_code)"
+          exit 1
+          fi
+    
+    - name: Configure AWS credentials
+      run: aws configure set aws_access_key_id ${{ secrets.AWS_ID }} && aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET }} && aws configure set region ap-south-1
+
+    - name: Authenticate Docker to AWS ECR
+      run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 779846827025.dkr.ecr.ap-south-1.amazonaws.com
+
+    - name: Tag Docker Image
+      run: docker tag dev/entry_tracker:latest 779846827025.dkr.ecr.ap-south-1.amazonaws.com/dev/entry_tracker:latest
+      
+    - name: Push Docker to ECR
+      run: docker push 779846827025.dkr.ecr.ap-south-1.amazonaws.com/dev/entry_tracker:latest
