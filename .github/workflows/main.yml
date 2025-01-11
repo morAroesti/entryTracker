@@ -42,7 +42,7 @@ jobs:
       run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 779846827025.dkr.ecr.ap-south-1.amazonaws.com
 
     - name: Tag Docker Image
-      run: docker tag dev/entry_tracker:1 779846827025.dkr.ecr.ap-south-1.amazonaws.com/dev/entry_tracker:1
+      run: docker tag entry_tracker:1 779846827025.dkr.ecr.ap-south-1.amazonaws.com/dev/entry_tracker:1
       
     - name: Push Docker to ECR
       run: docker push 779846827025.dkr.ecr.ap-south-1.amazonaws.com/dev/entry_tracker:1
