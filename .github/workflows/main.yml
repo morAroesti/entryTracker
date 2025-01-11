@@ -39,5 +39,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:  
+    - name: Checkout App
+      uses: actions/checkout@v2
+      
     - name: package and run the whole application
       run: docker compose up
