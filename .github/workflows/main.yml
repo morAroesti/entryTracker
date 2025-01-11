@@ -51,3 +51,26 @@ jobs:
     
     - name: E2E Testing
       run: curl http://localhost:5000 
+   
+  publish:
+    needs: package-and-E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:  
+    - name: Checkout App
+      uses: actions/checkout@v2
+      
+    - name: build
+      run: docker build -t entry_tracker:${{ github.run_number }} .
+ 
+    - name: Configure AWS credentials
+      run: aws configure set aws_access_key_id ${{ secrets.AWS_ID }} && aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET }} && aws configure set region ap-south-1
+
+    - name: Authenticate Docker to AWS ECR
+      run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 779846827025.dkr.ecr.ap-south-1.amazonaws.com
+
+    - name: Tag Docker Image
+      run: docker tag entry_tracker:${{ github.run_number }} 779846827025.dkr.ecr.ap-south-1.amazonaws.com/dev/entry_tracker:${{ github.run_number }}
+      
+    - name: Push Docker to ECR
+      run: docker push 779846827025.dkr.ecr.ap-south-1.amazonaws.com/dev/entry_tracker:${{ github.run_number }}
