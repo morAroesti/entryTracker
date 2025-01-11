@@ -26,7 +26,7 @@ jobs:
   
     - name: test status code curl
       run: |
-          response_code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5)
+          response_code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000)
           if [ $response_code -eq 200 ]; then
           echo "Service is up and running (Status code: $response_code)"
           exit 0
