@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: flask-app
+    environment:
+      - DB_HOST=${DB_HOST}    # change this when replacing MySQL contianer with another database
+      - DB_USER=${DB_USER}    # change this when replacing MySQL contianer with another database
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+    networks:
+      - app_network
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+    ports:
+      - "3306:3306"
+    networks:
+      - app_network
+    volumes:
+      - db-data:/var/lib/mysql
+
+networks:
+  app_network:
+
+volumes:
+  db-data:
