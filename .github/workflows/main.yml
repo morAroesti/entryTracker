@@ -34,7 +34,8 @@ jobs:
           echo "Service check failed (Status code: $response_code)"
           exit 1
           fi
-  package:
+          
+  package-and-E2E:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 2
@@ -42,5 +43,11 @@ jobs:
     - name: Checkout App
       uses: actions/checkout@v2
       
-    - name: package and run the whole application
-      run: docker compose up
+    - name: Package and run the whole application
+      run: docker compose up -d
+    
+    - name: Wait for services to be ready
+      run: sleep 15
+    
+    - name: E2E Testing
+      run: curl http://localhost:5000 
