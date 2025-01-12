@@ -91,17 +91,14 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET }}
         aws-region: ap-south-1
 
-    - name: Make scripts executable
+    - name: Fix line endings and make scripts executable
       run: |
-        ls -la  
-        pwd      
+        sed -i 's/\r$//' scripts/run-instances.sh
+        sed -i 's/\r$//' scripts/user-data.sh
         chmod +x scripts/run-instances.sh
         chmod +x scripts/user-data.sh
     
     - name: Launch EC2 and wait
-      run: |
-        pwd
-        ls -la scripts/
-        bash scripts/run-instances.sh -u scripts/user-data.sh
+      run: bash scripts/run-instances.sh -u scripts/user-data.sh
 
     
