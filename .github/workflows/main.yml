@@ -1,9 +1,5 @@
 name: entryTracker
-env:
-  AWS_SECURITY_GROUP_ID: sg-00257ff378acccd78
-  AWS_SUBNET_ID: subnet-02fe3384564948adb
-  AWS_EC2_KEY_NAME: morrost_ec2_keypair
-  INSTANCE_ID: 0
+
   
 on:
   push:
@@ -96,13 +92,9 @@ jobs:
         aws-region: ap-south-1
 
     - name: Make scripts executable
-      run: chmod +x ./scripts/launch-ec2.sh
+      run: chmod +x ./scripts/run-instances.sh
 
     - name: Launch EC2 and wait
-      run: ./scripts/launch-ec2.sh
-      env:
-        AWS_SECURITY_GROUP_ID: ${{ env.AWS_SECURITY_GROUP_ID }}
-        AWS_EC2_KEY_NAME: ${{env.AWS_EC2_KEY_NAME}}
-        AWS_SUBNET_ID: ${{ env.AWS_SUBNET_ID }}
-        INSTANCE_ID: ${{ env.INSTANCE_ID }}
+      run: ./scripts/run-instances.sh -u user-data.sh
+
     
