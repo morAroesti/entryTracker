@@ -104,6 +104,8 @@ jobs:
         chmod +x ./scripts/user-data.sh
     
     - name: Launch EC2 and wait
-      run: scripts/run-instances.sh -u scripts/user-data.sh
+      run: |
+        cd scripts
+        ./run-instances.sh -u ./user-data.sh
 
     
