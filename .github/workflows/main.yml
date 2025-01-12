@@ -74,3 +74,29 @@ jobs:
       
     - name: Push Docker to ECR
       run: docker push 779846827025.dkr.ecr.ap-south-1.amazonaws.com/dev/entry_tracker:${{ github.run_number }}
+  
+  Continuous_deployment:
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - name: Checkout App
+      uses: actions/checkout@v2
+      
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET }}
+        aws-region: ap-south-1
+
+    - name: Make scripts executable
+      run: chmod +x ./scripts/launch-ec2.sh
+
+    - name: Launch EC2 and wait
+      run: ./scripts/launch-ec2.sh
+      env:
+        AWS_SECURITY_GROUP_ID: ${{ secrets.AWS_SECURITY_GROUP_ID }}
+        AWS_SUBNET_ID: ${{ secrets.AWS_SUBNET_ID }}
+        INSTANCE_ID: ${{ env.INSTANCE_ID }}
+    
