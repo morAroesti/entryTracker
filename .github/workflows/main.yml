@@ -101,19 +101,19 @@ jobs:
     - name: Launch EC2 and wait
       run: bash scripts/run-instances.sh -u scripts/user-data.sh
       
-    - name: Import EC2 SSH key
-      run: |
-        echo "${{ secrets.EC2_PRI_KEY }}" > mor.pem
-        chmod 600 mor.pem
+    - name: Configure SSH
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.EC2_PRI_KEY }}
           
     - name: Run application
       run: |
         ssh -o StrictHostKeyChecking=no \
-            -i mor.pem \
             ec2-user@${{ env.PUBLIC_IP }} '
               cd /workspace/entryTracker && \
               docker compose up -d
             '
+ 
 
       
 
