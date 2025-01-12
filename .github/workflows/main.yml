@@ -101,18 +101,24 @@ jobs:
     # - name: Launch EC2 and wait
     #   run: bash scripts/run-instances.sh -u scripts/user-data.sh
       
+    - name: Debug SSH setup
+      run: |
+          eval $(ssh-agent -s)
+          ssh-add -l
+          echo "Attempting to connect to 13.235.17.14"
+        
     - name: Configure SSH
-      uses: webfactory/ssh-agent@v0.8.0
+      uses: webfactory/ssh-agent@v0.9.0
       with:
         ssh-private-key: ${{ secrets.EC2_PRI_KEY }}
-          
+    
     - name: Run application
       run: |
-        ssh -o StrictHostKeyChecking=no \
-            ec2-user@13.235.17.14 '
-              cd /workspace/entryTracker && \
-              docker compose up -d
-            '
+          # Print public key from private key for verification
+          ssh-keygen -y -f <(echo "${{ secrets.EC2_PRI_KEY }}") || echo "Invalid private key format"
+          
+          # Try connection with verbose output
+          ssh -v -o StrictHostKeyChecking=no ec2-user@13.235.17.14 'whoami'
 
 
       
