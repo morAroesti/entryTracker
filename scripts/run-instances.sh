@@ -150,20 +150,29 @@ INSTANCE_ID=$(aws ec2 run-instances \
 
 if [ $? -eq 0 ]; then
     echo "Successfully launched instance: $INSTANCE_ID"
-    echo "Waiting for instance to be running..."
-    
-    aws ec2 wait instance-running --instance-ids "$INSTANCE_ID"
-    
-    # Get instance public IP
-    PUBLIC_IP=$(aws ec2 describe-instances \
-        --instance-ids "$INSTANCE_ID" \
-        --query 'Reservations[0].Instances[0].PublicIpAddress' \
-        --output text)
-    
-    echo "Instance is now running!"
-    echo "Instance ID: $INSTANCE_ID"
-    echo "Public IP: $PUBLIC_IP"
-    echo "Instance Name: $INSTANCE_NAME"
+	echo "Waiting for instance to be running..."
+	aws ec2 wait instance-running --instance-ids "$INSTANCE_ID"
+	
+	echo "Waiting for instance status checks..."
+	aws ec2 wait instance-status-ok --instance-ids "$INSTANCE_ID"
+	
+	# Get instance public IP
+	PUBLIC_IP=$(aws ec2 describe-instances \
+		--instance-ids "$INSTANCE_ID" \
+		--query 'Reservations[0].Instances[0].PublicIpAddress' \
+		--output text)
+	
+	# Verify the status checks
+	INSTANCE_STATUS=$(aws ec2 describe-instance-status \
+		--instance-ids "$INSTANCE_ID" \
+		--query 'InstanceStatuses[0].{SystemStatus:SystemStatus.Status,InstanceStatus:InstanceStatus.Status}' \
+		--output text)
+	
+	echo "Instance fully provisioned!"
+	echo "Instance ID: $INSTANCE_ID"
+	echo "Public IP: $PUBLIC_IP"
+	echo "Instance Status: $INSTANCE_STATUS"
+	echo "Instance Name: $INSTANCE_NAME"
 else
     echo "Failed to launch instance"
     exit 1
