@@ -93,10 +93,10 @@ jobs:
     - name: Make scripts executable
       run: chmod +x ./scripts/launch-ec2.sh
 
-    # - name: Launch EC2 and wait
-    #   run: ./scripts/launch-ec2.sh
-    #   env:
-    #     AWS_SECURITY_GROUP_ID: ${{ secrets.AWS_SECURITY_GROUP_ID }}
-    #     AWS_SUBNET_ID: ${{ secrets.AWS_SUBNET_ID }}
-    #     # INSTANCE_ID: ${{ env.INSTANCE_ID }} 
+    - name: Launch EC2 and wait
+      run: ./scripts/launch-ec2.sh
+      env:
+        AWS_SECURITY_GROUP_ID: ${{ env.AWS_SECURITY_GROUP_ID }}
+        AWS_SUBNET_ID: ${{ env.AWS_SUBNET_ID }}
+        INSTANCE_ID: ${{ env.INSTANCE_ID }}
     
