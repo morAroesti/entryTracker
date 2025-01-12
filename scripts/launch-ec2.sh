@@ -7,22 +7,22 @@ export AWS_DEFAULT_REGION="ap-south-1"
 
    
 # Check if there's an existing EC2 instance
-if [[ ! -z "${INSTANCE_ID}" ]]; then
-    echo "Found existing EC2 instance: ${INSTANCE_ID}"
+# if [[ ! -z "${INSTANCE_ID}" ]]; then
+#     echo "Found existing EC2 instance: ${INSTANCE_ID}"
     
-    # Check if instance exists before attempting to terminate
-    if aws ec2 describe-instances --instance-ids ${INSTANCE_ID} >/dev/null 2>&1; then
-        echo "Terminating existing EC2 instance..."
-        aws ec2 terminate-instances --instance-ids ${INSTANCE_ID}
+#     # Check if instance exists before attempting to terminate
+#     if aws ec2 describe-instances --instance-ids ${INSTANCE_ID} >/dev/null 2>&1; then
+#         echo "Terminating existing EC2 instance..."
+#         aws ec2 terminate-instances --instance-ids ${INSTANCE_ID}
         
-        # Wait for the instance to be terminated
-        echo "Waiting for instance to be terminated..."
-        aws ec2 wait instance-terminated --instance-ids ${INSTANCE_ID}
-        echo "Previous instance terminated successfully"
-    else
-        echo "Previous instance ID not found, it may have been already terminated"
-    fi
-fi
+#         # Wait for the instance to be terminated
+#         echo "Waiting for instance to be terminated..."
+#         aws ec2 wait instance-terminated --instance-ids ${INSTANCE_ID}
+#         echo "Previous instance terminated successfully"
+#     else
+#         echo "Previous instance ID not found, it may have been already terminated"
+#     fi
+# fi
 
 read -r -d '' USER_DATA << 'EOF'
 #!/bin/bash
