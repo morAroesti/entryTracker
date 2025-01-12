@@ -7,22 +7,22 @@ export AWS_DEFAULT_REGION="ap-south-1"
 
    
 # Check if there's an existing EC2 instance
-# if [[ ! -z "${INSTANCE_ID}" ]]; then
-#     echo "Found existing EC2 instance: ${INSTANCE_ID}"
-    
-#     # Check if instance exists before attempting to terminate
-#     if aws ec2 describe-instances --instance-ids ${INSTANCE_ID} >/dev/null 2>&1; then
-#         echo "Terminating existing EC2 instance..."
-#         aws ec2 terminate-instances --instance-ids ${INSTANCE_ID}
-        
-#         # Wait for the instance to be terminated
-#         echo "Waiting for instance to be terminated..."
-#         aws ec2 wait instance-terminated --instance-ids ${INSTANCE_ID}
-#         echo "Previous instance terminated successfully"
-#     else
-#         echo "Previous instance ID not found, it may have been already terminated"
-#     fi
-# fi
+#if [[ ! -z "${INSTANCE_ID}" ]]; then
+#    echo "Found existing EC2 instance: ${INSTANCE_ID}"
+#    
+#    # Check if instance exists before attempting to terminate
+#    if aws ec2 describe-instances --instance-ids ${INSTANCE_ID} >/dev/null 2>&1; then
+#        echo "Terminating existing EC2 instance..."
+#        aws ec2 terminate-instances --instance-ids ${INSTANCE_ID}
+#        
+#        # Wait for the instance to be terminated
+#        echo "Waiting for instance to be terminated..."
+#        aws ec2 wait instance-terminated --instance-ids ${INSTANCE_ID}
+#        echo "Previous instance terminated successfully"
+#    else
+#        echo "Previous instance ID not found, it may have been already terminated"
+#    fi
+#fi
 
 read -r -d '' USER_DATA << 'EOF'
 #!/bin/bash
@@ -33,7 +33,7 @@ apt-get update
 apt-get install -y ca-certificates curl gnupg git
 
 # Create directory for keyrings
-# install -m 0755 -d /etc/apt/keyrings
+install -m 0755 -d /etc/apt/keyrings
 
 # Download and install Docker's official GPG key
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -70,11 +70,11 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --image-id ami-053b12d3152c0cc71 \
     --count 1 \
     --instance-type t3a.small \
-    --region ap-south-1 \
-    --associate-public-ip-address \
-    --subnet-id ${AWS_SUBNET_ID}
-    --key-name ${AWS_EC2_KEY_NAME} \
-    --block-device-mappings '[
+	--region ap-south-1 \
+	--associate-public-ip-address \
+	--subnet-id ${AWS_SUBNET_ID} \
+	--key-name ${AWS_EC2_KEY_NAME} \
+	--block-device-mappings '[
         {
             "DeviceName": "/dev/xvda",
             "Ebs": {
@@ -86,7 +86,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
         }]' \
     --security-group-ids ${AWS_SECURITY_GROUP_ID} \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=GITHUB-ACTIONS-entry-tracker-${GITHUB_RUN_NUMBER}}]" \
-    --user-data "$(echo "$USER_DATA" | base64)" \
+	--user-data "$(echo "$USER_DATA" | base64)" \
     --output text \
     --query 'Instances[0].InstanceId')
 
