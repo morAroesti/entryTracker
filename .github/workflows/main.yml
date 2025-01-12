@@ -83,18 +83,34 @@ jobs:
     - name: Checkout App
       uses: actions/checkout@v2
       
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET }}
-        aws-region: ap-south-1
+    # - name: Configure AWS credentials
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET }}
+    #     aws-region: ap-south-1
 
-    - name: Make scripts executable
-      run: chmod +x ./scripts/launch-ec2.sh
+    # - name: Make scripts executable
+    #   run: chmod +x ./scripts/launch-ec2.sh
 
     - name: print var
-      run: echo "a =  ${{env.AWS_SECURITY_GROUP_ID}}"
+      run: echo "a =  ${{env.entryTracker.AWS_SECURITY_GROUP_ID}}"
+
+    - name: print var2
+      run: echo "a =  ${{entryTracker.env.AWS_SECURITY_GROUP_ID}}"
+
+    - name: print var3
+      run: echo "a =  ${{entryTracker.AWS_SECURITY_GROUP_ID}}"
+      
+    - name: print var4
+      run: echo "a =  " ${{env.entryTracker.AWS_SECURITY_GROUP_ID}} 
+
+    - name: print var5
+      run: echo "a =  " ${{entryTracker.env.AWS_SECURITY_GROUP_ID}}
+
+    - name: print var6
+      run: echo "a =  "${{entryTracker.AWS_SECURITY_GROUP_ID}}
+
       
     # - name: Launch EC2 and wait
     #   run: ./scripts/launch-ec2.sh
