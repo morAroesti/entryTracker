@@ -1,5 +1,6 @@
 name: entryTracker
-
+env:
+  IAM_ROLE_NAME: Role_EC2_allow_ecr
   
 on:
   push:
@@ -91,15 +92,20 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET }}
         aws-region: ap-south-1
 
-    - name: Fix line endings and make scripts executable
+    - name: Make scripts executable
       run: |
         sed -i 's/\r$//' scripts/run-instances.sh
         sed -i 's/\r$//' scripts/user-data.sh
         chmod +x scripts/run-instances.sh
-        chmod +x scripts/user-data.sh
     
-    # - name: Launch EC2 and wait
-    #   run: bash scripts/run-instances.sh -u scripts/user-data.sh
+    - name: Launch EC2 and wait
+      run: bash scripts/run-instances.sh -u scripts/user-data.sh
+      
+    - name: Attach IAM Role to EC2
+      run: |
+        aws ec2 associate-iam-instance-profile \
+          --instance-id ${{ env.INSTANCE_ID }} \
+          --iam-instance-profile Name=${{ env.IAM_ROLE_NAME }}
       
     - name: Install SSH key
       uses: shimataro/ssh-key-action@v2
@@ -108,12 +114,11 @@ jobs:
         known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
         
     - name: Adding Known Hosts
-      run: ssh-keyscan -H 13.235.17.14 >> ~/.ssh/known_hosts
-
+      run: ssh-keyscan -H ${{ env.PUBLIC_IP }} >> ~/.ssh/known_hosts
+          
     - name: Deploy with SSH
       run: |
-        ssh ubuntu@13.235.17.14 '
-            cd workspace/entryTracker && \
+        ssh ubuntu${{ env.PUBLIC_IP }} '
+            cd /workspace/entryTracker && \
             docker compose up -d
-        '   
-    
+        '
