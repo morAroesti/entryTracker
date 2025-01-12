@@ -94,12 +94,12 @@ jobs:
       run: chmod +x ./scripts/launch-ec2.sh
 
     - name: print var
-      run: echo "a = " ${{env.entryTracker.AWS_SECURITY_GROUP_ID}}
+      run: echo "a =  ${{env.AWS_SECURITY_GROUP_ID}}"
       
-    - name: Launch EC2 and wait
-      run: ./scripts/launch-ec2.sh
-      env:
-        AWS_SECURITY_GROUP_ID: ${{ env.entryTracker.AWS_SECURITY_GROUP_ID }}
-        AWS_SUBNET_ID: ${{ env.entryTracker.AWS_SUBNET_ID }}
-        INSTANCE_ID: ${{ env.entryTracker.INSTANCE_ID }}
+    # - name: Launch EC2 and wait
+    #   run: ./scripts/launch-ec2.sh
+    #   env:
+    #     AWS_SECURITY_GROUP_ID: ${{ env.entryTracker.AWS_SECURITY_GROUP_ID }}
+    #     AWS_SUBNET_ID: ${{ env.entryTracker.AWS_SUBNET_ID }}
+    #     INSTANCE_ID: ${{ env.entryTracker.INSTANCE_ID }}
     
