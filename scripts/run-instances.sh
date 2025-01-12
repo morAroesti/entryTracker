@@ -168,13 +168,15 @@ if [ $? -eq 0 ]; then
 		--query 'InstanceStatuses[0].{SystemStatus:SystemStatus.Status,InstanceStatus:InstanceStatus.Status}' \
 		--output text)
 	
-	echo "Instance fully provisioned!"
+	
 	echo "Instance ID: $INSTANCE_ID"
+	echo "INSTANCE_ID=$INSTANCE_ID" >> $GITHUB_ENV
 	echo "Public IP: $PUBLIC_IP"
 	echo "Instance Status: $INSTANCE_STATUS"
 	echo "Instance Name: $INSTANCE_NAME"
 	echo "Waiting for instance status checks..."
 	aws ec2 wait instance-status-ok --instance-ids "$INSTANCE_ID"
+	echo "Instance fully provisioned!"
 else
     echo "Failed to launch instance"
     exit 1
