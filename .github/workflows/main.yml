@@ -91,21 +91,17 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET }}
         aws-region: ap-south-1
 
-    # Debug step to check files and permissions
-    - name: Debug directory content
-      run: |
-        pwd
-        ls -la
-        ls -la scripts/
-    
     - name: Make scripts executable
       run: |
-        chmod +x ./scripts/run-instances.sh
-        chmod +x ./scripts/user-data.sh
+        ls -la  
+        pwd      
+        chmod +x scripts/run-instances.sh
+        chmod +x scripts/user-data.sh
     
     - name: Launch EC2 and wait
       run: |
-        cd scripts
-        ./run-instances.sh -u ./user-data.sh
+        pwd
+        ls -la scripts/
+        bash scripts/run-instances.sh -u scripts/user-data.sh
 
     
