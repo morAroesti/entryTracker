@@ -151,8 +151,7 @@ if [ $? -eq 0 ]; then
 	echo "Waiting for instance to be running..."
 	aws ec2 wait instance-running --instance-ids "$INSTANCE_ID"
 	
-	echo "Waiting for instance status checks..."
-	aws ec2 wait instance-status-ok --instance-ids "$INSTANCE_ID"
+
 	
 	# Get instance public IP
 	PUBLIC_IP=$(aws ec2 describe-instances \
@@ -171,6 +170,8 @@ if [ $? -eq 0 ]; then
 	echo "Public IP: $PUBLIC_IP"
 	echo "Instance Status: $INSTANCE_STATUS"
 	echo "Instance Name: $INSTANCE_NAME"
+	echo "Waiting for instance status checks..."
+	aws ec2 wait instance-status-ok --instance-ids "$INSTANCE_ID"
 else
     echo "Failed to launch instance"
     exit 1
