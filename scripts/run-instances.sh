@@ -115,6 +115,24 @@ fi
 # Set AWS region
 export AWS_DEFAULT_REGION="$REGION"
 
+# Check for existing instance with the same name
+echo "Checking for existing instances with name: $INSTANCE_NAME"
+EXISTING_INSTANCE=$(aws ec2 describe-instances \
+    --filters "Name=tag:Name,Values=$INSTANCE_NAME" "Name=instance-state-name,Values=pending,running,stopping,stopped" \
+    --query 'Reservations[*].Instances[*].[InstanceId]' \
+    --output text)
+
+if [ ! -z "$EXISTING_INSTANCE" ]; then
+    echo "Found existing instance with ID: $EXISTING_INSTANCE"
+    echo "Terminating existing instance..."
+    
+    aws ec2 terminate-instances --instance-ids "$EXISTING_INSTANCE"
+    echo "Waiting for instance termination..."
+    aws ec2 wait instance-terminated --instance-ids "$EXISTING_INSTANCE"
+    
+    echo "Existing instance terminated successfully"
+fi
+
 # Launch EC2 instance
 echo "Launching EC2 instance in region $REGION..."
 INSTANCE_ID=$(aws ec2 run-instances \
