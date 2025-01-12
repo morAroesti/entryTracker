@@ -158,6 +158,9 @@ if [ $? -eq 0 ]; then
 		--instance-ids "$INSTANCE_ID" \
 		--query 'Reservations[0].Instances[0].PublicIpAddress' \
 		--output text)
+		
+	echo "Instance Public IP: $PUBLIC_IP"
+	echo "PUBLIC_IP=$PUBLIC_IP" >> $GITHUB_ENV	
 	
 	# Verify the status checks
 	INSTANCE_STATUS=$(aws ec2 describe-instance-status \
