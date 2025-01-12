@@ -95,6 +95,8 @@ jobs:
       run: chmod +x ./scripts/run-instances.sh
 
     - name: Launch EC2 and wait
-      run: ./scripts/run-instances.sh -u user-data.sh
+      id: launchEC2
+      working-directory: scripts
+      run: ./run-instances.sh -u user-data.sh
 
     
