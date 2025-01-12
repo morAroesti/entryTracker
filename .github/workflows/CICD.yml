@@ -106,10 +106,7 @@ jobs:
         aws ec2 associate-iam-instance-profile \
           --instance-id ${{ env.INSTANCE_ID }} \
           --iam-instance-profile Name=${{ env.IAM_ROLE_NAME }}
-      
-    - name: Wait for SSH to be ready
-      run: sleep 30
-      
+          
     - name: Install SSH key
       uses: shimataro/ssh-key-action@v2
       with:
@@ -121,7 +118,7 @@ jobs:
           
     - name: Deploy with SSH
       run: |
-        ssh ubuntu${{ env.PUBLIC_IP }} '
+        ssh ubuntu@${{ env.PUBLIC_IP }} '
             cd /workspace/entryTracker && \
             docker compose up -d
         '
