@@ -109,7 +109,7 @@ jobs:
     - name: Run application
       run: |
         ssh -o StrictHostKeyChecking=no \
-            ec2-user@${{ env.PUBLIC_IP }} '
+            ec2-user@13.235.17.14 '
               cd /workspace/entryTracker && \
               docker compose up -d
             '
