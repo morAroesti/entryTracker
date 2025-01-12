@@ -70,11 +70,11 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --image-id ami-053b12d3152c0cc71 \
     --count 1 \
     --instance-type t3a.small \
-	--region ap-south-1 \
-	--associate-public-ip-address \
-	--subnet-id ${AWS_SUBNET_ID}
-	--key-name ${AWS_EC2_KEY_NAME} \
-	--block-device-mappings '[
+    --region ap-south-1 \
+    --associate-public-ip-address \
+    --subnet-id ${AWS_SUBNET_ID}
+    --key-name ${AWS_EC2_KEY_NAME} \
+    --block-device-mappings '[
         {
             "DeviceName": "/dev/xvda",
             "Ebs": {
@@ -86,7 +86,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
         }]' \
     --security-group-ids ${AWS_SECURITY_GROUP_ID} \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=GITHUB-ACTIONS-entry-tracker-${GITHUB_RUN_NUMBER}}]" \
-	--user-data "$(echo "$USER_DATA" | base64)" \
+    --user-data "$(echo "$USER_DATA" | base64)" \
     --output text \
     --query 'Instances[0].InstanceId')
 
