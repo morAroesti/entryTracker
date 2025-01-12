@@ -98,5 +98,5 @@ jobs:
       env:
         AWS_SECURITY_GROUP_ID: ${{ secrets.AWS_SECURITY_GROUP_ID }}
         AWS_SUBNET_ID: ${{ secrets.AWS_SUBNET_ID }}
-        INSTANCE_ID: ${{ env.INSTANCE_ID }} 
+        # INSTANCE_ID: ${{ env.INSTANCE_ID }} 
     
