@@ -98,18 +98,18 @@ jobs:
         chmod +x scripts/run-instances.sh
         chmod +x scripts/user-data.sh
     
-    - name: Launch EC2 and wait
-      run: bash scripts/run-instances.sh -u scripts/user-data.sh
+    # - name: Launch EC2 and wait
+    #   run: bash scripts/run-instances.sh -u scripts/user-data.sh
       
     - name: Configure SSH
-      uses: webfactory/ssh-agent@v0.8.0
+      uses: webfactory/ssh-agent@v0.9.0
       with:
-        ssh-private-key: ${{ secrets.EC2_PRI_KEY }}
+          ssh-private-key: ${{ secrets.EC2_PRI_KEY }}
           
     - name: Run application
       run: |
         ssh -o StrictHostKeyChecking=no \
-            ec2-user@${{ env.PUBLIC_IP }} '
+            ec2-user@13.235.17.14 '
               cd /workspace/entryTracker && \
               docker compose up -d
             '
