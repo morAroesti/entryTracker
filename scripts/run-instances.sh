@@ -127,8 +127,6 @@ if [ ! -z "$EXISTING_INSTANCE" ]; then
     echo "Terminating existing instance..."
     
     aws ec2 terminate-instances --instance-ids "$EXISTING_INSTANCE"
-    echo "Waiting for instance termination..."
-    aws ec2 wait instance-terminated --instance-ids "$EXISTING_INSTANCE"
     
     echo "Existing instance terminated successfully"
 fi
