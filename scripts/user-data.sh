@@ -35,3 +35,11 @@ cd /home/ubuntu/workspace
 git clone -b Continuous_Deployment_Usage https://github.com/morAroesti/entryTracker.git
 
 chown -R ubuntu:ubuntu /home/ubuntu/workspace
+
+# INSTALL AWS CLI AND UNZIP
+cd /home/ubuntu/
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+sudo apt install unzip
+unzip -u awscliv2.zip
+sudo /home/ubuntu/aws/install
