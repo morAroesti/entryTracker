@@ -1,7 +1,6 @@
 services:
   web:
-    build: .
-    container_name: flask-app
+    image: 779846827025.dkr.ecr.ap-south-1.amazonaws.com/dev/entry_tracker:latest
     environment:
       - DB_HOST=${DB_HOST}
       - DB_USER=${DB_USER}
