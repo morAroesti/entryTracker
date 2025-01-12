@@ -119,6 +119,6 @@ jobs:
     - name: Deploy with SSH
       run: |
         ssh ubuntu@${{ env.PUBLIC_IP }} '
-            cd /workspace/entryTracker && \
+            cd /home/ubuntu/workspace/entryTracker && \
             docker compose up -d
         '
