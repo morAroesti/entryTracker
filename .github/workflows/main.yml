@@ -94,7 +94,9 @@ jobs:
     #   run: chmod +x ./scripts/launch-ec2.sh
 
     - name: print var
-      run: echo "a =  ${{env.entryTracker.AWS_SECURITY_GROUP_ID}}"
+      run: echo "a =  ${{entryTracker.AWS_SECURITY_GROUP_ID}}"
+    - name: print var2
+      run: echo "a =  ${{entryTracker.env.AWS_SECURITY_GROUP_ID}}"
 
 
       
