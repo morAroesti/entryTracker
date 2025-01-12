@@ -33,7 +33,7 @@ apt-get update
 apt-get install -y ca-certificates curl gnupg git
 
 # Create directory for keyrings
-install -m 0755 -d /etc/apt/keyrings
+# install -m 0755 -d /etc/apt/keyrings
 
 # Download and install Docker's official GPG key
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
