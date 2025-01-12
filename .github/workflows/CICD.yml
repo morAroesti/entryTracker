@@ -107,6 +107,9 @@ jobs:
           --instance-id ${{ env.INSTANCE_ID }} \
           --iam-instance-profile Name=${{ env.IAM_ROLE_NAME }}
       
+    - name: Wait for SSH to be ready
+      run: sleep 30
+      
     - name: Install SSH key
       uses: shimataro/ssh-key-action@v2
       with:
