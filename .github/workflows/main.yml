@@ -104,16 +104,17 @@ jobs:
     - name: Configure SSH
       uses: webfactory/ssh-agent@v0.9.0
       with:
-          ssh-private-key: ${{ secrets.EC2_PRI_KEY }}
+          ssh-private-key: |
+            ${{ secrets.EC2_PRI_KEY }}
           
     - name: Run application
       run: |
         ssh -o StrictHostKeyChecking=no \
-            ec2-user@13.235.17.14 '
+            ec2-user@${{ 13.235.17.14 }} '
               cd /workspace/entryTracker && \
               docker compose up -d
             '
- 
+  
 
       
 
